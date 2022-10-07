@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;600;700;800&family=Rubik+Dirt&display=swap');
+
+@layer{
+  .box {
+    @apply container mx-auto max-w-[1350px] px-5;
+  }
+  .sideNav-list-item{
+    @apply flex text-2xl
+  }
+  .sideNav-list-item div{
+    @apply flex hover:bg-gray-200 p-3 cursor-pointer rounded-2xl gap-5 items-center justify-start 
+  }
+  .sideNav-list-item p{
+    @apply text-xl text-siteGray 
+  }
+  .btn{
+    @apply flex items-center justify-center bg-siteLightBlue px-6 text-white rounded-3xl my-2
+  }
+}
