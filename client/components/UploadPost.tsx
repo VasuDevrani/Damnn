@@ -6,7 +6,7 @@ import { AiOutlineFileGif } from "react-icons/ai";
 
 export default function UploadPost() {
   return (
-    <div className="flex flex-row my-5 items-start border-2 border-l-0 py-2 px-1">
+    <div className="flex flex-row my-5 mt-2 items-start border-2 border-l-0 py-2 px-1">
       <div className="flex-[0.15] flex items-center justify-center">
         <img
           src="https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"

@@ -1,5 +1,6 @@
 const posts = [
   {
+    id:'1',
     time: "20min",
     userName: "vasuDevrani",
     content:
@@ -44,6 +45,7 @@ const posts = [
     ],
   },
   {
+    id:'2',
     time: "20min",
     userName: "vasuDevrani",
     content:
@@ -88,6 +90,7 @@ const posts = [
     ],
   },
   {
+    id:'3',
     time: "20min",
     userName: "vasuDevrani",
     content:
@@ -132,6 +135,7 @@ const posts = [
     ],
   },
   {
+    id:'4',
     time: "20min",
     userName: "vasuDevrani",
     content:

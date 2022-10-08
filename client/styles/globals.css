@@ -21,3 +21,7 @@
     @apply flex items-center justify-center bg-siteLightBlue px-6 text-white rounded-3xl my-2
   }
 }
+
+::-webkit-scrollbar{
+  display: none;
+}

@@ -55,6 +55,7 @@ export default function SideNavBar() {
           <p>More</p>
         </div>
       </div>
+      <div className="btn py-3">Share</div>
     </div>
   );
 }
