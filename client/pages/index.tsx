@@ -23,9 +23,11 @@ const Home: NextPage = () => {
           <UploadPost />
           <Posts />
         </div>
-        <div className="flex-[0.40] m-3">
-          <SearchBox/>
-          <Popular/>
+        <div className="flex-[0.40] p-3">
+          <div className="sticky top-0 py-1 bg-white">
+            <SearchBox />
+          </div>
+          <Popular />
         </div>
       </div>
     </>
