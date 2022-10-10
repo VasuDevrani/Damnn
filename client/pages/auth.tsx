@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { FaCamera } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import LoginModal from "../components/LoginModal";
 import RegisterEmailModal from "../components/RegisterEmailModal";
+import { increment } from "../slices/UserSlice";
 
 export default function Auth() {
   const [modal1, setModal1] = useState(false);
   const [modal2, setModal2] = useState(false);
   const [modal3, setModal3] = useState(false);
+
+  const dispatch = useDispatch();
 
   return (
     <div className="flex flex-col md:flex-row items-center">
