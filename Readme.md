@@ -6,5 +6,7 @@
 - NextJS
 - MongoDB
 - Tailwind, MUI and Framer-Motion
-- REST
-- Redux
+- RESTFUL APIs using TypeScript
+- Redux toolkit, Redux Thunk
+- Firebase Auth
+- bcryptjs and jwt authentication
