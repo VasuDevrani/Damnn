@@ -1,7 +1,7 @@
 import jwt, { Secret, JwtPayload } from "jsonwebtoken";
-import User from "../models/UserModel.js";
+import User from "../models/UserModel";
 import { Request, Response, NextFunction } from "express";
-import { UserI } from "../interfaces/interface.js";
+import { UserI } from "../interfaces/interface";
 
 var secret: Secret = process.env.JWT_SECRET as unknown as Secret
 
@@ -20,7 +20,8 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
 
       //decodes user id from token
       var decoded = jwt.verify(token, secret) as JwtPayload;
-      (req as CustomRequest).user = await User.findById(decoded.id).select("-password") as UserI;
+      (req as CustomRequest).user = await User.findById(decoded.id).select("-password") as unknown as UserI;
+      
       return next()
     } catch (error) {
       res.status(401);

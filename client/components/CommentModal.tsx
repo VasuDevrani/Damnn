@@ -39,9 +39,9 @@ export default function CommentModal({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <div>
+          <div onClick={() => setOpen(!open)}>
             <IconButton>
-              <div className="text-2xl my-2 text-gray-600" onClick={() => setOpen(!open)}>
+              <div className="text-2xl my-2 text-gray-600">
                 <BiArrowBack />
               </div>
             </IconButton>

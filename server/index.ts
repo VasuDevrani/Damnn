@@ -10,6 +10,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+import UserRoutes from './routes/UserRoutes'
+
 const mongoURL = process.env.MONGO_URL;
 
 mongoose
@@ -20,6 +22,8 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+app.use('/user', UserRoutes)
 
 app.listen(process.env.PORT, () => {
   console.log(`server listening to port ${process.env.PORT}`);

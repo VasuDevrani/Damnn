@@ -8,7 +8,6 @@ import CommentModal from "./CommentModal";
 import { useRouter } from "next/router";
 
 export default function Post({
-  key,
   id,
   userName,
   time,

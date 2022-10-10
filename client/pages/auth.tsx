@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { FaCamera } from "react-icons/fa";
+import LoginModal from "../components/LoginModal";
+import RegisterEmailModal from "../components/RegisterEmailModal";
 
 export default function Auth() {
-  const [isRegister, setIsRegister] = useState(false);
+  const [modal1, setModal1] = useState(false);
+  const [modal2, setModal2] = useState(false);
+  const [modal3, setModal3] = useState(false);
 
   return (
     <div className="flex flex-col md:flex-row items-center">
@@ -22,12 +26,12 @@ export default function Auth() {
           <p className="text-2xl font-semibold">🔥Join Damnn Today</p>
         </div>
         <div className="flex flex-col items-start gap-4">
-          <p className="p-2 px-4 border bg-siteLightBlue text-white cursor-pointer rounded-3xl">
-            Sign Up with Google
-          </p>
-          <p className="p-2 border cursor-pointer rounded-3xl bg-siteLightBlue text-white px-4">
-            Sign Up with Phone or Email
-          </p>
+          <div
+            className="p-2 border cursor-pointer rounded-3xl bg-siteLightBlue text-white px-4"
+            onClick={() => setModal2(!modal2)}
+          >
+            Sign Up Now !!
+          </div>
           <div className="text-[15px]">
             <p className="text-left">
               By signing up, you agree to the{" "}
@@ -48,12 +52,17 @@ export default function Auth() {
 
           <div className="flex items-start flex-col my-5 gap-2">
             <p className="text-xl font-semibold">Already have an Account?</p>
-            <p className="p-2 border-2 cursor-pointer rounded-3xl px-8">
+            <div
+              className="p-2 border-2 cursor-pointer rounded-3xl px-8"
+              onClick={() => setModal1(!modal1)}
+            >
               Sign In
-            </p>
+            </div>
           </div>
         </div>
       </div>
+      <LoginModal modal1={modal1} setModal1={setModal1} />
+      <RegisterEmailModal modal2={modal2} setModal2={setModal2} />
     </div>
   );
 }
