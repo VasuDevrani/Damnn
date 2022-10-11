@@ -12,6 +12,7 @@ app.use(express.json());
 
 import UserRoutes from './routes/UserRoutes'
 import PostRoutes from './routes/PostRoute'
+import CommentRoutes from './routes/CommentRoute'
 
 const mongoURL = process.env.MONGO_URL;
 
@@ -26,6 +27,7 @@ mongoose
 
 app.use('/user', UserRoutes);
 app.use('/post', PostRoutes);
+app.use('/comment', CommentRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`server listening to port ${process.env.PORT}`);
