@@ -4,7 +4,7 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { BiArrowBack } from "react-icons/bi";
-import { FaCamera } from "react-icons/fa";
+import { FaCamera, FaImage } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../context/hooks";
 import { register, reset } from "../slices/UserSlice";
 import { useRouter } from "next/router";
@@ -50,7 +50,10 @@ export default function RegisterEmailModal({
     dob: "",
     bio: "",
     confirmPassword: "",
+    poster_path: "",
+    bg_poster: "",
   });
+  const [load, setLoad] = useState(false);
   const [page, setPage] = useState(1);
   const [disable, setDisable] = useState(true);
 
@@ -81,13 +84,42 @@ export default function RegisterEmailModal({
             dispatch(register(data));
           })
           .catch((err) => {
-            window.alert("Please enter correct credentials");
             console.log(err);
           });
       }
       return;
     }
     setPage(page < 3 ? page + 1 : 1);
+  };
+
+  const addImage = (image: HTMLInputElement) => {
+    let img;
+    if (image.files) img = image.files[0];
+    else return;
+
+    setLoad(true);
+    if (img.type === "image/jpeg" || img.type === "image/png") {
+      const data = new FormData();
+      data.append("file", img);
+      data.append("upload_preset", "Garuda");
+      data.append("cloud_name", "di5gni2uz");
+      fetch("http://api.cloudinary.com/v1_1/di5gni2uz/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          setFormData({ ...formData, poster_path: data.url.toString() });
+          setLoad(false);
+        })
+        .catch((err) => {
+          setLoad(false);
+        });
+    } else {
+      setLoad(false);
+    }
   };
 
   const handleClose = () => {
@@ -106,6 +138,8 @@ export default function RegisterEmailModal({
       dob: "",
       bio: "",
       confirmPassword: "",
+      poster_path: "",
+      bg_poster: "",
     });
   };
 
@@ -263,6 +297,38 @@ export default function RegisterEmailModal({
                     onChange={handleChange}
                   ></textarea>
                 </div>
+                <div className="my-2 rounded-3xl w-[70%] flex flex-col">
+                  <label
+                    htmlFor="imageFile"
+                    className="text-black text-xl flex gap-2 items-center my-2"
+                  >
+                    <FaImage /> Add profile image :{" "}
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="outline-none px-2 w-full"
+                    onChange={(event) =>
+                      addImage(event.target as HTMLInputElement)
+                    }
+                  />
+                </div>
+                <div className="my-2 rounded-3xl w-[70%] flex flex-col">
+                  <label
+                    htmlFor="imageFile"
+                    className="text-black text-xl flex gap-2 items-center my-2"
+                  >
+                    <FaImage /> Add background image :{" "}
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="outline-none px-2 w-full"
+                    onChange={(event) =>
+                      addImage(event.target as HTMLInputElement)
+                    }
+                  />
+                </div>
               </div>
             ) : (
               ""
@@ -279,7 +345,7 @@ export default function RegisterEmailModal({
                 sx={{ width: "50%", margin: "auto" }}
                 onClick={handleRegister}
               >
-                {page === 3 ? "Lets Go" : "next"}
+                {load ? "loading..." : page === 3 ? "Lets Go" : "next"}
               </Button>
             </div>
           </Box>

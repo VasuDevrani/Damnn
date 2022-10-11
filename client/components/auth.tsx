@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaCamera } from "react-icons/fa";
-import LoginModal from "../components/LoginModal";
-import RegisterEmailModal from "../components/RegisterEmailModal";
+import LoginModal from "./LoginModal";
+import RegisterEmailModal from "./RegisterEmailModal";
 
 export default function Auth() {
   const [modal1, setModal1] = useState(false);

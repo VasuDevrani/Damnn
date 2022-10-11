@@ -3,11 +3,6 @@ import { authSliceI } from "../interfaces/sliceInterfaces";
 import { UserI } from "../interfaces/userInterface";
 import authService from "../utils/authService";
 
-// let userData = window.localStorage.getItem('user')
-// userData
-//     ? JSON.parse(userData as unknown as string)
-//     :
-
 const initialState: authSliceI = {
   userInfo: null,
   isLoading: false,
@@ -73,8 +68,9 @@ const UserSlice = createSlice({
   reducers: {
     reset: (state) => {
       state.isError = false;
-      state.isLoading = true;
+      state.isLoading = false;
       state.isSuccess = false;
+      state.userInfo = null;
     },
   },
 

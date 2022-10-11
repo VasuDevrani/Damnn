@@ -33,6 +33,7 @@ const registerUser = async (req: Request, res: Response) => {
       _id: user._id,
       followings: user.followings,
       followers: user.followers,
+      bio: user.bio,
       token: token,
     });
   } catch (err: any) {
@@ -67,6 +68,7 @@ const loginUser = async (req: Request, res: Response) => {
         _id: user._id,
         followings: user.followings,
         followers: user.followers,
+        bio: user.bio,
         token: generateToken(id),
       });
     } else {
@@ -132,6 +134,7 @@ const userDataByEmail = async (req: Request, res: Response) => {
       _id: user._id,
       followings: user.followings,
       followers: user.followers,
+      bio: user.bio,
       token: token,
     });
   } catch (err: any) {
