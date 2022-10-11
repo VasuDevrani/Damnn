@@ -19,3 +19,18 @@ export interface foll {
   type?: mongoose.Types.ObjectId | undefined;
   ref?: unknown;
 }
+
+export interface postI{
+  content?: string;
+  user?: string;
+  date: string;
+  images?: String[];
+  _id?: String;
+  likes: Number;
+  shares: Number;
+  comments: commentI[]
+}
+
+export interface commentI{
+  
+}
