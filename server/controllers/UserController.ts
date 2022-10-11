@@ -106,4 +106,38 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export { registerUser, updateUser, loginUser, userDetails };
+const userDataByEmail = async (req: Request, res: Response) => {
+  try {
+    const { email, isFirAuth } = req.body;
+
+    if (!isFirAuth) {
+      res.status(400).json({ message: "unregistered user" });
+    }
+
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      res.status(400).json({ message: "unregistered user" });
+      return;
+    }
+
+    const id = user._id.toString();
+    let token;
+    token = generateToken(id);
+    res.status(200).json({
+      name: user.name,
+      address: user.address,
+      dob: user.dob,
+      poster_path: user.poster_path,
+      bg_poster: user.bg_poster,
+      _id: user._id,
+      followings: user.followings,
+      followers: user.followers,
+      token: token,
+    });
+  } catch (err: any) {
+    console.log(err);
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export { registerUser, updateUser, loginUser, userDetails, userDataByEmail };

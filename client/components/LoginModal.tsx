@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { FaCamera } from "react-icons/fa";
@@ -6,6 +6,8 @@ import { BiArrowBack } from "react-icons/bi";
 import { Button } from "@mui/material";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "../context/hooks";
+import { firLogin, login, reset } from "../slices/UserSlice";
 
 // firebase
 import {
@@ -38,6 +40,11 @@ export default function LoginModal({
     flexDirection: "column",
   };
 
+  const { isLoading, isSuccess, isError, message } = useAppSelector(
+    (state) => state.user
+  );
+  const dispatch = useAppDispatch();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -53,26 +60,35 @@ export default function LoginModal({
 
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((res) => {
-        console.log(res.user);
+        dispatch(login(formData));
       })
       .catch((err) => {
         window.alert("Please enter correct credentials");
         console.log(err);
       });
-
-    router.push("/");
   };
 
   const handleGoogleAuth = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        console.log(result);
-        router.push('/')
+        const email = result.user.email ? result.user.email : "";
+        dispatch(firLogin({ email: email, isFirAuth: true }));
       })
       .catch((error) => {
         window.alert(error.message);
       });
   };
+
+  useEffect(() => {
+    if (isError) {
+      console.log(message);
+    }
+    if (isSuccess) {
+      router.push("/");
+    }
+
+    dispatch(reset());
+  }, [formData, isError, message, router, dispatch]);
 
   return (
     <div>

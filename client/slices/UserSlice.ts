@@ -1,17 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { authSliceI } from "../interfaces/sliceInterfaces";
 import { UserI } from "../interfaces/userInterface";
 import authService from "../utils/authService";
 
 // let userData = window.localStorage.getItem('user')
 // userData
 //     ? JSON.parse(userData as unknown as string)
-//     : 
+//     :
 
-const initialState = {
+const initialState: authSliceI = {
   userInfo: null,
   isLoading: false,
   isError: false,
-  message: ''
+  isSuccess: false,
+  message: "",
 };
 
 // register user
@@ -31,6 +33,40 @@ export const register = createAsyncThunk(
   }
 );
 
+// login user
+export const login = createAsyncThunk(
+  "user/login",
+  async (user: { email: string; password: string }, thunkAPI) => {
+    try {
+      return await authService.login(user);
+    } catch (err: any) {
+      const message =
+        (err.message && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// getData by firebase login
+export const firLogin = createAsyncThunk(
+  "user/dt",
+  async (user: { email: string; isFirAuth: boolean }, thunkAPI) => {
+    try {
+      return await authService.firGooglAuth(user);
+    } catch (err: any) {
+      const message =
+        (err.message && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const UserSlice = createSlice({
   name: "user",
   initialState,
@@ -38,26 +74,62 @@ const UserSlice = createSlice({
     reset: (state) => {
       state.isError = false;
       state.isLoading = true;
+      state.isSuccess = false;
     },
   },
 
   extraReducers: (builder) => {
-    builder 
-        .addCase(register.pending, (state) => {
-            state.isLoading = true;
-        })
-        .addCase(register.fulfilled, (state, action) => {
-            state.isLoading = false;
-            state.isError = false;
-            state.userInfo = action.payload;
-        })
-        .addCase(register.rejected, (state, action) => {
-            state.isError = true;
-            state.isLoading = false;
-            state.message = action.payload as string;
-            state.userInfo = null;
-        })
-  }
+    builder
+      .addCase(register.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.userInfo = action.payload;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.payload as string;
+        state.userInfo = null;
+      })
+      .addCase(login.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.userInfo = action.payload;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.payload as string;
+        state.userInfo = null;
+      })
+      .addCase(firLogin.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(firLogin.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.userInfo = action.payload;
+      })
+      .addCase(firLogin.rejected, (state, action) => {
+        state.isError = true;
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.message = action.payload as string;
+        state.userInfo = null;
+      });
+  },
 });
 
+export const { reset } = UserSlice.actions;
 export default UserSlice.reducer;
