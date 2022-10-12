@@ -15,7 +15,7 @@ export default function CommentModal({
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  userName: string;
+  userName?: string;
 }) {
   const style = {
     position: "absolute",

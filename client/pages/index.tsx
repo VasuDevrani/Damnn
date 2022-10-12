@@ -7,9 +7,33 @@ import Popular from "../components/Popular";
 import SearchBox from "../components/SearchBox";
 import { useAppSelector } from "../context/hooks";
 import Auth from "../components/auth";
+import instance from "../utils/axios";
+import { useEffect, useState } from "react";
+import Loader from "../components/Loader";
 
-const Home: NextPage = () => {
+const Home: NextPage = ({}) => {
   const { userInfo } = useAppSelector((state) => state.user);
+  const [postData, setPostData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const getPosts = async () => {
+    setLoading(true);
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${userInfo?.token}` },
+      };
+      const { data } = await instance.get(`/post/${userInfo?._id}`, config);
+      setPostData(data);
+      setLoading(false);
+    } catch (err: any) {
+      console.log(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo) getPosts();
+  }, [userInfo]);
   return (
     <>
       {userInfo ? (
@@ -26,7 +50,7 @@ const Home: NextPage = () => {
                 </div>
               </div>
               <UploadPost />
-              <Posts />
+              {!loading ? <Posts posts={postData} /> : <Loader />}
             </div>
             <div className="flex-[0.40] p-3">
               <div className="sticky top-0 py-1 bg-white">

@@ -1,5 +1,6 @@
 export interface UserI {
   name: string;
+  _id?: string;
   dob: string;
   password: string;
   email: string;
@@ -8,4 +9,5 @@ export interface UserI {
   bg_poster?: string;
   address?: string;
   bio?: string;
+  token?: string;
 }

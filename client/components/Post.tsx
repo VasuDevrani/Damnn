@@ -8,11 +8,11 @@ import CommentModal from "./CommentModal";
 import { useRouter } from "next/router";
 
 export default function Post({
-  id,
-  userName,
+  _id,
+  name,
   time,
+  images,
   content,
-  Name,
   likes,
   comments,
   shares,
@@ -34,13 +34,22 @@ export default function Post({
         <div className="flex flex-col flex-[0.9] my-2">
           <div
             className="flex gap-2 text-sm"
-            onClick={() => router.push(`${id}`)}
+            onClick={() => router.push(`${_id}`)}
           >
-            <p className="font-bold">{Name}</p>
-            <p className="text-gray-600">{userName} -</p>
+            <p className="font-bold">{name}</p>
+            <p className="text-gray-600">{name} -</p>
             <p className="text-gray-600">{time}</p>
           </div>
           <div className="text-sm my-1">{content}</div>
+          <div className="my-2">
+            {images && images.length > 0 && (
+              <div className="flex flex-row gap-2 overflow-scroll">
+                {images.map((image) => (
+                  <img src={image} alt="images" className="w-60" />
+                ))}
+              </div>
+            )}
+          </div>
           <div className="flex flex-row justify-around">
             <div className="flex items-center text-sm text-siteBlue">
               {likes}
@@ -62,7 +71,7 @@ export default function Post({
               className="flex items-center text-sm text-siteBlue"
               onClick={() => setOpen(!open)}
             >
-              {comments}
+              {comments?.length}
               <IconButton>
                 <div className="text-siteBlue text-base hover:text-violet-600">
                   <AiOutlineComment />
@@ -73,7 +82,7 @@ export default function Post({
         </div>
       </div>
       {/* {comment && <Comment commentData={commentsData} />} */}
-      <CommentModal open={open} setOpen={setOpen} userName={userName} />
+      <CommentModal open={open} setOpen={setOpen} userName={name} />
     </div>
   );
 }
