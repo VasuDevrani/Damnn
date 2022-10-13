@@ -5,34 +5,41 @@ import { BsStar } from "react-icons/bs";
 import Posts from "../components/Posts";
 import Popular from "../components/Popular";
 import SearchBox from "../components/SearchBox";
-import { useAppSelector } from "../context/hooks";
+import { useAppDispatch, useAppSelector } from "../context/hooks";
 import Auth from "../components/auth";
-import instance from "../utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Loader from "../components/Loader";
+import { timeline } from "../slices/PostSlice";
+import { postI } from "../interfaces/postInterface";
 
 const Home: NextPage = ({}) => {
   const { userInfo } = useAppSelector((state) => state.user);
-  const [postData, setPostData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { posts, isLoading } = useAppSelector(
+    (state) => state.post
+  );
 
-  const getPosts = async () => {
-    setLoading(true);
-    try {
-      const config = {
-        headers: { Authorization: `Bearer ${userInfo?.token}` },
-      };
-      const { data } = await instance.get(`/post/${userInfo?._id}`, config);
-      setPostData(data);
-      setLoading(false);
-    } catch (err: any) {
-      console.log(err.message);
-      setLoading(false);
-    }
-  };
+  const dispatch = useAppDispatch();
+
+  // const [postData, setPostData] = useState([]);
+  // const [loading, setLoading] = useState(false);
+
+  // const getPosts = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const config = {
+  //       headers: { Authorization: `Bearer ${userInfo?.token}` },
+  //     };
+  //     const { data } = await instance.get(`/post/${userInfo?._id}`, config);
+  //     setPostData(data);
+  //     setLoading(false);
+  //   } catch (err: any) {
+  //     console.log(err.message);
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
-    if (userInfo) getPosts();
+    if (userInfo) dispatch(timeline(userInfo));
   }, [userInfo]);
   return (
     <>
@@ -50,7 +57,7 @@ const Home: NextPage = ({}) => {
                 </div>
               </div>
               <UploadPost />
-              {!loading ? <Posts posts={postData} /> : <Loader />}
+              {!isLoading ? <Posts posts={posts} /> : <Loader />}
             </div>
             <div className="flex-[0.40] p-3">
               <div className="sticky top-0 py-1 bg-white">

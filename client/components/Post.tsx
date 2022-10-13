@@ -6,6 +6,9 @@ import { AiOutlineComment } from "react-icons/ai";
 import { IconButton } from "@mui/material";
 import CommentModal from "./CommentModal";
 import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "../context/hooks";
+import { likePost } from "../slices/PostSlice";
+import instance from "../utils/axios";
 
 export default function Post({
   _id,
@@ -18,15 +21,50 @@ export default function Post({
   shares,
 }: postI) {
   const [open, setOpen] = useState(false);
+  const { userInfo } = useAppSelector((state) => state.user);
 
+  const dispatch = useAppDispatch();
   const router = useRouter();
+
+  const handleLike = async () => {
+    const config = {
+      headers: { Authorization: `Bearer ${userInfo?.token}` },
+    };
+
+    const userId: string = (userInfo ? userInfo._id : "") as string;
+    let dupLikes = likes;
+    if (dupLikes.includes(userId)) {
+      const index = dupLikes.indexOf(userId);
+      if (dupLikes.length == 1) {
+        dupLikes = [];
+      } else {
+        dupLikes.splice(index, 1);
+      }
+    } else dupLikes = [...dupLikes, userId];
+
+    var updateData = {
+      comments: comments,
+      likes: dupLikes,
+    };
+    try {      
+      const { data } = await instance.put(
+        `/post/${_id}`,
+        updateData,
+        config
+      );
+    } catch (err: any) {
+      console.log(err);
+    }
+
+    dispatch(likePost({ postId: _id, userId: userInfo ? userInfo._id : "" }));
+  };
 
   return (
     <div className="mx-2 border-b">
       <div className="flex flex-row cursor-pointer">
         <div className="flex-[0.1]">
           <img
-            src="https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+            src={userInfo?.poster_path}
             alt="image"
             className="object-contain w-3/4"
           />
@@ -51,11 +89,18 @@ export default function Post({
             )}
           </div>
           <div className="flex flex-row justify-around">
-            <div className="flex items-center text-sm text-siteBlue">
-              {likes}
+            <div
+              className="flex items-center text-sm text-siteBlue"
+              onClick={handleLike}
+            >
+              {likes?.length}
               <IconButton>
-                <div className="text-siteBlue text-base hover:text-pink-600">
-                  <BsHeart />
+                <div className={`text-siteBlue text-base hover:text-pink-600`}>
+                  {userInfo && userInfo._id && likes.includes(userInfo._id) ? (
+                    "💖"
+                  ) : (
+                    <BsHeart />
+                  )}
                 </div>
               </IconButton>
             </div>

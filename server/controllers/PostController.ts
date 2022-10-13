@@ -44,23 +44,25 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
-const updatePost = async (req: Request, res: Response) => {
-  console.log(req.method);
+const updatePost = async (req: Request, res: Response) => {  
   try {
     const id = req.params.id;
 
-    const userId = (req as CustomRequest).user._id;
+    const userId = (req as CustomRequest).user._id;    
     const prePost: postI = (await Post.findById(id)) as postI;
 
-    if (prePost.user !== userId) {
+    if (prePost.user?.toString() !== userId?.toString()) {
       res
         .status(400)
         .json({ message: "user not authorised for changes in the post" });
       return;
     }
     const post = await Post.findByIdAndUpdate(id, req.body, { new: true });
+    
     res.status(200).json(post);
   } catch (err: any) {
+    console.log(err);
+    
     res.status(500).json({ message: err.message });
   }
 };

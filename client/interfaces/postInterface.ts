@@ -7,12 +7,13 @@ export interface commentI {
 }
 export interface postI {
   key: string;
+  date?: string;
   _id: string;
   name?: string;
   time?: string;
   images?: string[];
   content?: string;
-  likes?: number;
+  likes: string[];
   comments?: commentI[];
   shares?: number;
 }

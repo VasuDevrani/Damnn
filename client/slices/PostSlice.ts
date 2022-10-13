@@ -31,11 +31,32 @@ const PostSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    reset: (state) => {
+    resetPost: (state) => {
       state.posts = [];
       state.isError = false;
       state.isLoading = false;
     },
+    likePost: (state, action) => {
+      const { postId, userId } = action.payload;
+
+      state.posts.map((post) => {
+        if (post._id === postId) {
+          if (post.likes) {
+            if (post.likes.includes(userId)) {
+              const index = post.likes.indexOf(userId);
+              post.likes.splice(index, 1);
+            }
+           else{
+            post.likes = [...post.likes, userId];
+          }}
+        
+        }
+      });
+    },
+    addNewPost: (state, action) => {
+        const post = action.payload;
+        state.posts = [...state.posts, post];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -55,5 +76,5 @@ const PostSlice = createSlice({
   },
 });
 
-export const { reset } = PostSlice.actions;
+export const { resetPost, likePost, addNewPost } = PostSlice.actions;
 export default PostSlice.reducer;

@@ -17,11 +17,12 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
   ) {
     try {
       token = req.headers.authorization.split(" ")[1];
-
+      
       //decodes user id from token
       var decoded = jwt.verify(token, secret) as JwtPayload;
-      (req as CustomRequest).user = await User.findById(decoded.id).select("-password") as unknown as UserI;
       
+      (req as CustomRequest).user = await User.findById(decoded.id).select("-password") as unknown as UserI;  
+          
       return next()
     } catch (error) {
       res.status(401);

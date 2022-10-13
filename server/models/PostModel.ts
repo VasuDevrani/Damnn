@@ -5,7 +5,7 @@ const PostSchema = new mongoose.Schema({
   content: { type: String },
   images: [String],
   date: { type: Date, default: Date.now() },
-  likes: { type: Number, default: 0 },
+  likes: [String],
   shares: { type: Number, default: 0 },
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comments" }],
 });

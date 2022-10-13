@@ -5,10 +5,14 @@ import { GoLocation } from "react-icons/go";
 import { AiOutlineFileGif } from "react-icons/ai";
 import EmojiPicker from "emoji-picker-react";
 import instance from "../utils/axios";
-import { useAppSelector } from "../context/hooks";
+import { useAppDispatch, useAppSelector } from "../context/hooks";
+import { addNewPost, timeline } from "../slices/PostSlice";
 
 export default function UploadPost() {
   const { userInfo } = useAppSelector((state) => state.user);
+  const { posts } = useAppSelector((state) => state.post);
+
+  const dispatch = useAppDispatch();
 
   const file = useRef<HTMLInputElement | null>(null);
 
@@ -75,6 +79,8 @@ export default function UploadPost() {
         post,
         config
       );
+      console.log(data);
+      dispatch(addNewPost(data));
       reset();
     } catch (err: any) {
       console.log(err.message);
@@ -83,17 +89,17 @@ export default function UploadPost() {
   };
 
   const reset = () => {
-      setPost({
-        content: "",
-        images: [],
-      })
-  }
+    setPost({
+      content: "",
+      images: [],
+    });
+  };
 
   return (
     <div className="flex flex-row my-5 mt-2 items-start border-2 border-l-0 py-2 px-1 relative">
       <div className="flex-[0.15] flex items-center justify-center">
         <img
-          src="https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png"
+          src={userInfo?.poster_path}
           alt="profile"
           className="object-contain w-1/2"
         />
@@ -110,17 +116,13 @@ export default function UploadPost() {
             setPost({ ...post, content: e.target.value });
           }}
         />
-        {
-          (post.images.length > 0) && (
-            <div className="flex flex-row gap-2 overflow-scroll">
-                {
-                  post.images.map((image) => (
-                    <img src={image} alt="images" className="w-60"/>
-                  ))
-                }
-            </div>
-          )
-        }
+        {post.images.length > 0 && (
+          <div className="flex flex-row gap-2 overflow-scroll">
+            {post.images.map((image) => (
+              <img src={image} alt="images" className="w-60" />
+            ))}
+          </div>
+        )}
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-row text-xl text-siteLightBlue gap-4 my-4">
             <div
