@@ -32,5 +32,8 @@ export interface postI{
 }
 
 export interface commentI{
-  
+  content: String;
+  user: {type: mongoose.Schema.Types.ObjectId | undefined, ref: 'User'};
+  post: {type: mongoose.Schema.Types.ObjectId | undefined, ref: 'Post'}
+  replies: Number;
 }

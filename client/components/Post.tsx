@@ -127,7 +127,7 @@ export default function Post({
         </div>
       </div>
       {/* {comment && <Comment commentData={commentsData} />} */}
-      <CommentModal open={open} setOpen={setOpen} userName={name} />
+      <CommentModal open={open} setOpen={setOpen} userName={name} id={_id}/>
     </div>
   );
 }

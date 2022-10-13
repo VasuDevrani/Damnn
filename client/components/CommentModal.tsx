@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { BsImage, BsEmojiSmile, BsCalendar } from "react-icons/bs";
@@ -7,16 +7,24 @@ import { GoLocation } from "react-icons/go";
 import { AiOutlineFileGif } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { IconButton } from "@mui/material";
+import instance from "../utils/axios";
+import { useAppDispatch, useAppSelector } from "../context/hooks";
+import { addNewComment } from "../slices/PostSlice";
 
 export default function CommentModal({
   open,
   setOpen,
   userName,
+  id,
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   userName?: string;
+  id: string;
 }) {
+  const dispatch = useAppDispatch();
+  const { userInfo } = useAppSelector((state) => state.user);
+
   const style = {
     position: "absolute",
     top: "30%",
@@ -30,6 +38,21 @@ export default function CommentModal({
     display: "flex",
     flexDirection: "column",
   };
+
+  const [comment, setComment] = useState("");
+
+  const addComment = async () => {
+    const { data } = await instance.post(`/comment/${id}`, {
+      content: comment,
+      replies: 0,
+      user: userInfo?._id,
+      post: id,
+    });
+    dispatch(addNewComment({ comment: data, postId: id }));
+    setComment('');
+    setOpen(false);
+  };
+
   return (
     <div>
       <Modal
@@ -71,6 +94,8 @@ export default function CommentModal({
             <textarea
               placeholder="Enter your commentt here"
               className="flex-auto outline-none"
+              value={comment}
+              onChange={(event) => setComment(event?.target.value)}
             ></textarea>
           </div>
           <div className="flex flex-row justify-between w-full">
@@ -82,7 +107,9 @@ export default function CommentModal({
               <BsCalendar />
               <GoLocation />
             </div>
-            <div className="btn">Share</div>
+            <div className="btn" onClick={addComment}>
+              Share
+            </div>
           </div>
         </Box>
       </Modal>

@@ -81,6 +81,7 @@ const getTimelinePost = async (req: Request, res: Response) => {
       .populate("user")
       .populate("comments")) as postI[];
 
+
     if (!data) {
       res.status(400).json({ message: "no post found" });
       return;

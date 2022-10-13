@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { postI } from "../interfaces/interface";
+import { commentI, postI } from "../interfaces/interface";
 import { CustomRequest } from "../middlewares/authMiddleware";
 import Comments from "../models/CommentModel";
 import Post from "../models/PostModel";
@@ -8,16 +8,29 @@ const createComment = async (req: Request, res: Response) => {
   console.log(req.method);
   try {
     const postId = req.params.id;
-    const { user, content, likes, replies } = req.body;
+    const { user, content, replies } = req.body;
 
     const comment = await Comments.create({
       post: postId,
       user: user,
-      likes: likes,
       replies: replies,
       content: content,
     });
 
+    let postItem = await Post.findById(postId);
+
+    var preData = postItem?.comments as commentI[];
+    console.log(preData);
+
+    const newPost = await Post.findByIdAndUpdate(
+      postItem?._id,
+      {
+        comments: [...preData, comment._id.toString()],
+      },
+      { new: true }
+    );
+
+    console.log(newPost);
     res.status(200).json(comment);
   } catch (err: any) {
     res.status(500).json({ message: err.message });

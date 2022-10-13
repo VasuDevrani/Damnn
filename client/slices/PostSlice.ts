@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { commentI } from "../interfaces/postInterface";
 import { postSliceI } from "../interfaces/sliceInterfaces";
 import { UserI } from "../interfaces/userInterface";
 import { PostService } from "../utils/PostService";
@@ -45,18 +46,26 @@ const PostSlice = createSlice({
             if (post.likes.includes(userId)) {
               const index = post.likes.indexOf(userId);
               post.likes.splice(index, 1);
+            } else {
+              post.likes = [...post.likes, userId];
             }
-           else{
-            post.likes = [...post.likes, userId];
-          }}
-        
+          }
         }
       });
     },
     addNewPost: (state, action) => {
-        const post = action.payload;
-        state.posts = [...state.posts, post];
-    }
+      const post = action.payload;
+      state.posts = [...state.posts, post];
+    },
+    addNewComment: (state, action) => {
+      const { comment, postId } = action.payload;
+
+      state.posts.map((post) => {
+        if (post._id === postId) {
+          post.comments = [...(post.comments as commentI[]), comment];
+        }
+      });
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,5 +85,5 @@ const PostSlice = createSlice({
   },
 });
 
-export const { resetPost, likePost, addNewPost } = PostSlice.actions;
+export const { resetPost, likePost, addNewPost, addNewComment } = PostSlice.actions;
 export default PostSlice.reducer;
