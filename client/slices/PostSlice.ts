@@ -55,7 +55,7 @@ const PostSlice = createSlice({
     },
     addNewPost: (state, action) => {
       const post = action.payload;
-      state.posts = [...state.posts, post];
+      state.posts = [post, ...state.posts];
     },
     addNewComment: (state, action) => {
       const { comment, postId } = action.payload;

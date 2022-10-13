@@ -143,4 +143,27 @@ const userDataByEmail = async (req: Request, res: Response) => {
   }
 };
 
-export { registerUser, updateUser, loginUser, userDetails, userDataByEmail };
+const getPopularUsers = async (req: Request, res: Response) => {
+  console.log(req.method);
+
+  try {
+    const users = await User.find();
+    users.sort((a: any, b: any) => {
+      return a.followers.length - b.followers.length;
+    });
+
+    users.splice(Math.max(users.length, 6));
+    res.status(200).json(users);
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+};
+
+export {
+  registerUser,
+  updateUser,
+  loginUser,
+  userDetails,
+  userDataByEmail,
+  getPopularUsers,
+};

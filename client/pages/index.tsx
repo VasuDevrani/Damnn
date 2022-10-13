@@ -3,7 +3,6 @@ import Head from "next/head";
 import UploadPost from "../components/UploadPost";
 import { BsStar } from "react-icons/bs";
 import Posts from "../components/Posts";
-import Popular from "../components/Popular";
 import SearchBox from "../components/SearchBox";
 import { useAppDispatch, useAppSelector } from "../context/hooks";
 import Auth from "../components/auth";
@@ -11,12 +10,11 @@ import { useEffect } from "react";
 import Loader from "../components/Loader";
 import { timeline } from "../slices/PostSlice";
 import { postI } from "../interfaces/postInterface";
+import ForFollow from "../components/ForFollow";
 
 const Home: NextPage = ({}) => {
   const { userInfo } = useAppSelector((state) => state.user);
-  const { posts, isLoading } = useAppSelector(
-    (state) => state.post
-  );
+  const { posts, isLoading } = useAppSelector((state) => state.post);
 
   const dispatch = useAppDispatch();
 
@@ -63,7 +61,7 @@ const Home: NextPage = ({}) => {
               <div className="sticky top-0 py-1 bg-white">
                 <SearchBox />
               </div>
-              <Popular />
+              <ForFollow />
             </div>
           </div>
         </>
