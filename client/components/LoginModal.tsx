@@ -56,7 +56,6 @@ export default function LoginModal({
 
   const handleSubmit = (event: FormEvent<Element>) => {
     event.preventDefault();
-    console.log(formData);
 
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((res) => {

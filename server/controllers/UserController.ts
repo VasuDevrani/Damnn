@@ -108,6 +108,34 @@ const updateUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateFollow = async (req: Request, res: Response) => {
+  console.log(req.body);
+  const id = (req as CustomRequest).user._id;
+
+  const { followers, followerId } = req.body;
+
+  try {
+      const user = await User.findById(id);
+      if (!user)
+        res.status(400).json({ message: "No such User exist, can't update" });
+      const details = await User.findByIdAndUpdate(
+        id,
+        { followers: followers },
+        {
+          new: true,
+        }
+      );
+      await User.findByIdAndUpdate(followerId, {
+        followings: id,
+      });
+      res.status(200).json(details);
+  } catch (err: any) {
+    console.log(err);
+    
+    res.status(500).json({ error: err.message });
+  }
+};
+
 const userDataByEmail = async (req: Request, res: Response) => {
   try {
     const { email, isFirAuth } = req.body;
@@ -147,9 +175,16 @@ const getPopularUsers = async (req: Request, res: Response) => {
   console.log(req.method);
 
   try {
+    const id = (req as CustomRequest).user._id;
+
     const users = await User.find();
+
     users.sort((a: any, b: any) => {
       return a.followers.length - b.followers.length;
+    });
+
+    users.filter((item) => {
+      return item._id.toString() !== id;
     });
 
     users.splice(Math.max(users.length, 6));
@@ -166,4 +201,5 @@ export {
   userDetails,
   userDataByEmail,
   getPopularUsers,
+  updateFollow,
 };

@@ -30,6 +30,7 @@ export default function SideNavBar() {
 
   const handleLogout = () => {
     dispatch(reset());
+    router.push('/')
   };
 
   return (

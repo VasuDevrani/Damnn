@@ -62,6 +62,23 @@ export const firLogin = createAsyncThunk(
   }
 );
 
+// follow user
+export const followUser = createAsyncThunk(
+  "user/follow",
+  async (data: { userInfo: UserI; id: string }, thunkAPI) => {
+    try {
+      return await authService.updateFollowings(data);
+    } catch (err: any) {
+      const message =
+        (err.message && err.response.data && err.response.data.message) ||
+        err.message ||
+        err.toString();
+
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const UserSlice = createSlice({
   name: "user",
   initialState,
@@ -123,6 +140,10 @@ const UserSlice = createSlice({
         state.isSuccess = false;
         state.message = action.payload as string;
         state.userInfo = null;
+      })
+      .addCase(followUser.fulfilled, (state, action) => {
+        const token = state.userInfo?.token;
+        state.userInfo = { token, ...action.payload };
       });
   },
 });

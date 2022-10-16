@@ -5,15 +5,20 @@ import {
   loginUser,
   userDetails,
   userDataByEmail,
-  getPopularUsers
+  getPopularUsers,
+  updateFollow,
 } from "../controllers/UserController";
 import { protect } from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
-router.route("/").post(registerUser).put(protect, updateUser).get(protect, getPopularUsers);
+router
+  .route("/")
+  .post(registerUser)
+  .put(protect, updateUser)
+  .get(protect, getPopularUsers);
 router.post("/login", loginUser);
 router.get("/:id", userDetails);
-router.post('/dt', userDataByEmail);
+router.route("/dt").post(userDataByEmail).put(protect, updateFollow);
 
 export default router;

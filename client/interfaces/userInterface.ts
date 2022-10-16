@@ -8,6 +8,7 @@ export interface UserI {
   poster_path?: string;
   bg_poster?: string;
   address?: string;
+  followers?: string[]
   bio?: string;
   token?: string;
 }
