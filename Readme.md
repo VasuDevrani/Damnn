@@ -10,3 +10,4 @@
 - Redux toolkit, Redux Thunk
 - Firebase Auth
 - bcryptjs and jwt authentication
+- Socket.io
