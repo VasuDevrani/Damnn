@@ -9,6 +9,7 @@ export interface UserI {
   bg_poster?: string;
   address?: string;
   followers?: string[]
+  followings?: string[];
   bio?: string;
   token?: string;
 }

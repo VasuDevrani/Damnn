@@ -46,7 +46,7 @@ export default function ForFollow() {
         <>
           <div className="flex items-center flex-col w-full">
             {users.map((user: UserI) => (
-              <div className="flex flex-row gap-3 items-center justify-around w-full">
+              <div className="flex flex-row mx-3 items-center justify-between w-full">
                 <div className="flex gap-3">
                   <img src={userInfo?.poster_path} alt="" className="w-10" />
                   <div className="text-sm font-semibold">{user?.name}</div>
@@ -56,8 +56,8 @@ export default function ForFollow() {
                   onClick={() => followUserFunc(user._id ? user._id : "")}
                 >
                   {userInfo &&
-                  userInfo?.followers &&
-                  userInfo.followers.includes(user._id ? user._id : "")
+                  userInfo?.followings &&
+                  userInfo.followings.includes(user._id ? user._id : "")
                     ? "Following"
                     : "follow"}
                 </div>

@@ -99,13 +99,19 @@ export default function PostDetails() {
               <div className="flex flex-row items-center gap-3">
                 <div>
                   <img
-                    src={userInfo?.poster_path}
+                    src={
+                      postData && postData.user
+                        ? postData?.user.poster_path
+                        : ""
+                    }
                     alt="image"
                     className="object-contain w-14"
                   />
                 </div>
                 <div className="">
-                  <p className="text-sm font-semibold">{userInfo?.name}</p>
+                  <p className="text-sm font-semibold">
+                    {postData && postData.user && postData?.user.name}
+                  </p>
                   <p className="text-sm text-gray-500">@vasudevrani</p>
                 </div>
               </div>

@@ -23,7 +23,7 @@ export interface foll {
 export interface postI{
   content?: string;
   user?: string;
-  date: string;
+  date: Date;
   images?: String[];
   _id?: String;
   likes: Number;

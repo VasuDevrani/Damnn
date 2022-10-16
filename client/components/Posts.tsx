@@ -1,11 +1,8 @@
 import React from "react";
 import Post from "./Post";
 import { postI } from "../interfaces/postInterface";
-import { useAppSelector } from "../context/hooks";
 
 export default function Posts({ posts }: { posts: postI[] }) {
-  const { userInfo } = useAppSelector((state) => state.user);
-
   return (
     <>
       {posts.length > 0 ? (
@@ -14,7 +11,14 @@ export default function Posts({ posts }: { posts: postI[] }) {
             <Post
               key={post._id}
               _id={post._id}
-              name={userInfo?.name}
+              name={post?.user && post.user.name}
+              profile={
+                post?.user
+                  ? post.user.poster_path
+                    ? post.user.poster_path
+                    : ""
+                  : ""
+              }
               time={post.time}
               images={post.images}
               content={post.content}

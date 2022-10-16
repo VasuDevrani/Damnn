@@ -35,21 +35,21 @@ const updateFollowings = async (data: { userInfo: UserI; id: string }) => {
     headers: { Authorization: `Bearer ${data.userInfo?.token}` },
   };
 
-  let followers: string[] = [];
+  let followings: string[] = [];
   if (
     data.userInfo &&
-    data.userInfo.followers &&
-    !data.userInfo.followers.includes(data.id)
+    data.userInfo.followings &&
+    !data.userInfo.followings.includes(data.id)
   )
-    followers = [...data.userInfo.followers, data.id];
+    followings = [...data.userInfo.followings, data.id];
   else {
-    followers = data.userInfo.followers?.filter((item) => {
-      return item != data.id;
+    followings = data.userInfo.followings?.filter((item) => {
+      return item !== data.id;
     }) as string[];
   }
   const response = await instance.put(
-    "/user/",
-    { followers: followers, followerId: data.id },
+    "/user/dt",
+    { followings: followings, followerId: data.id },
     config
   );
 

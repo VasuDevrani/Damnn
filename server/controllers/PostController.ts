@@ -44,25 +44,25 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
-const updatePost = async (req: Request, res: Response) => {  
+const updatePost = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
 
-    const userId = (req as CustomRequest).user._id;    
-    const prePost: postI = (await Post.findById(id)) as postI;
+    // const userId = (req as CustomRequest).user._id;
+    // const prePost: postI = (await Post.findById(id)) as postI;
 
-    if (prePost.user?.toString() !== userId?.toString()) {
-      res
-        .status(400)
-        .json({ message: "user not authorised for changes in the post" });
-      return;
-    }
+    // if (prePost.user?.toString() !== userId?.toString()) {
+    //   res
+    //     .status(400)
+    //     .json({ message: "user not authorised for changes in the post" });
+    //   return;
+    // }
     const post = await Post.findByIdAndUpdate(id, req.body, { new: true });
-    
+
     res.status(200).json(post);
   } catch (err: any) {
     console.log(err);
-    
+
     res.status(500).json({ message: err.message });
   }
 };
@@ -81,7 +81,6 @@ const getTimelinePost = async (req: Request, res: Response) => {
       .populate("user")
       .populate("comments")) as postI[];
 
-
     if (!data) {
       res.status(400).json({ message: "no post found" });
       return;
@@ -97,6 +96,10 @@ const getTimelinePost = async (req: Request, res: Response) => {
         postArr = [...postArr, ...data];
       }
     }
+
+    console.log(postArr);
+    postArr.sort((a: postI, b: postI) =>  b.date.getTime() - a.date.getTime());
+    console.log(postArr);
 
     res.status(200).json(postArr);
   } catch (err: any) {

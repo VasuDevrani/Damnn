@@ -1,3 +1,5 @@
+import { UserI } from "./userInterface";
+
 export interface commentI {
   Name: string;
   time: string;
@@ -9,6 +11,7 @@ export interface postI {
   key: string;
   date?: string;
   _id: string;
+  user?: UserI;
   name?: string;
   time?: string;
   images?: string[];

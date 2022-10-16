@@ -110,28 +110,52 @@ const updateUser = async (req: Request, res: Response) => {
 
 const updateFollow = async (req: Request, res: Response) => {
   console.log(req.body);
-  const id = (req as CustomRequest).user._id;
+  // the user who followed
+  const id: string = (req as CustomRequest).user._id as string;
 
-  const { followers, followerId } = req.body;
+  // followers array and the followed userID
+  const { followings, followerId } = req.body;
 
   try {
-      const user = await User.findById(id);
-      if (!user)
-        res.status(400).json({ message: "No such User exist, can't update" });
-      const details = await User.findByIdAndUpdate(
-        id,
-        { followers: followers },
-        {
-          new: true,
-        }
-      );
-      await User.findByIdAndUpdate(followerId, {
-        followings: id,
+    const user = await User.findById(id);
+    if (!user)
+      res.status(400).json({ message: "No such User exist, can't update" });
+    const details = await User.findByIdAndUpdate(
+      id,
+      { followings: followings },
+      {
+        new: true,
+      }
+    );
+
+    const otherUser = await User.findById(followerId);
+
+    let followerArr: string[] = [];
+    let ct = 0;
+    if (otherUser && otherUser.followers && id) {
+      for (var i = 0; i < otherUser.followers.length; i++) {
+        followerArr = [...followerArr, otherUser.followers[i].toString()];
+        if (otherUser.followers[i].toString() === id) ct++;
+      }
+    }
+
+    if (ct === 0) followerArr = [...followerArr, id];
+    else
+      followerArr = followerArr.filter((item) => {
+        return item.toString() !== id;
       });
-      res.status(200).json(details);
+
+    await User.findByIdAndUpdate(
+      followerId,
+      {
+        followers: followerArr,
+      },
+      { new: true }
+    );
+    res.status(200).json(details);
   } catch (err: any) {
     console.log(err);
-    
+
     res.status(500).json({ error: err.message });
   }
 };

@@ -19,7 +19,8 @@ export default function Post({
   likes,
   comments,
   shares,
-}: postI) {
+  profile
+}: postI & {profile: string}) {
   const [open, setOpen] = useState(false);
   const { userInfo } = useAppSelector((state) => state.user);
 
@@ -47,7 +48,7 @@ export default function Post({
       likes: dupLikes,
     };
     try {      
-      const { data } = await instance.put(
+      await instance.put(
         `/post/${_id}`,
         updateData,
         config
@@ -64,7 +65,7 @@ export default function Post({
       <div className="flex flex-row cursor-pointer">
         <div className="flex-[0.1]">
           <img
-            src={userInfo?.poster_path}
+            src={profile}
             alt="image"
             className="object-contain w-3/4"
           />
