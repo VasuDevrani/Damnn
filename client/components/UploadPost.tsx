@@ -6,11 +6,10 @@ import { AiOutlineFileGif } from "react-icons/ai";
 import EmojiPicker from "emoji-picker-react";
 import instance from "../utils/axios";
 import { useAppDispatch, useAppSelector } from "../context/hooks";
-import { addNewPost, timeline } from "../slices/PostSlice";
+import { addNewPost } from "../slices/PostSlice";
 
 export default function UploadPost() {
   const { userInfo } = useAppSelector((state) => state.user);
-  const { posts } = useAppSelector((state) => state.post);
 
   const dispatch = useAppDispatch();
 

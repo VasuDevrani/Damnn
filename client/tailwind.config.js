@@ -26,6 +26,9 @@ module.exports = {
       gridTemplateColumns: {
         16: "repeat(auto-fit, minmax(400px, 1fr))",
       },
+      backgroundImage: {
+        chatBg: "url('https://i.pinimg.com/564x/c0/c2/bb/c0c2bbb1a6632dfe2680670320d0fc01.jpg')"
+      }
     },
   },
   plugins: [],
