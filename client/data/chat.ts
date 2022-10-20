@@ -35,3 +35,31 @@ export const chatList = [
         users: ['Rahul', "Mohan"]
     }
 ]
+
+export const messageData = [
+    {
+        _id: '1',
+        senderId: '734hjdtf82394',
+        content: 'This is my message'
+      },
+      {
+        _id: '2',
+        senderId: '63492ac6639b8b7e1122e5ed',
+        content: 'This is my message'
+      },
+      {
+        _id: '3',
+        senderId: '734hjdtf82394',
+        content: 'This is my message'
+      },
+      {
+        _id: '4',
+        senderId: '734hjdtf82394',
+        content: 'This is my message'
+      },
+      {
+        _id: '5',
+        senderId: '63492ac6639b8b7e1122e5ed',
+        content: 'This is my message'
+      }
+]
