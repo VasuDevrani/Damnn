@@ -31,8 +31,10 @@ export const accessChat = async (req: Request, res: Response) => {
   if (finalChat.length > 0) {
     res.send(finalChat[0]);
   } else {
+    const otherUser = await User.findById(userId);
+
     var chatData = {
-      chatName: "sender",
+      chatName: otherUser ? otherUser.name : "",
       isGroupChat: false,
       users: [(req as CustomRequest).user._id, userId],
     };

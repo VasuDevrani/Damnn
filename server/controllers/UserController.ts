@@ -135,16 +135,19 @@ const updateFollow = async (req: Request, res: Response) => {
     if (otherUser && otherUser.followers && id) {
       for (var i = 0; i < otherUser.followers.length; i++) {
         followerArr = [...followerArr, otherUser.followers[i].toString()];
-        if (otherUser.followers[i].toString() === id) ct++;
+        if (otherUser.followers[i].toString() === id.toString()) ct++;
       }
     }
+
+    console.log(followerArr);
 
     if (ct === 0) followerArr = [...followerArr, id];
     else
       followerArr = followerArr.filter((item) => {
-        return item.toString() !== id;
+        return item.toString() !== id.toString();
       });
 
+    console.log(followerArr);
     await User.findByIdAndUpdate(
       followerId,
       {

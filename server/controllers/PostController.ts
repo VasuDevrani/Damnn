@@ -24,7 +24,6 @@ const createPost = async (req: Request, res: Response) => {
 };
 
 const deletePost = async (req: Request, res: Response) => {
-  console.log(req.method);
   try {
     const id = req.params.id;
 
@@ -61,7 +60,6 @@ const updatePost = async (req: Request, res: Response) => {
 
     res.status(200).json(post);
   } catch (err: any) {
-    console.log(err);
 
     res.status(500).json({ message: err.message });
   }
@@ -97,9 +95,7 @@ const getTimelinePost = async (req: Request, res: Response) => {
       }
     }
 
-    console.log(postArr);
     postArr.sort((a: postI, b: postI) =>  b.date.getTime() - a.date.getTime());
-    console.log(postArr);
 
     res.status(200).json(postArr);
   } catch (err: any) {
