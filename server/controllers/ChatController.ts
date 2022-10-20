@@ -8,7 +8,6 @@ export const accessChat = async (req: Request, res: Response) => {
   const { userId } = req.body;
 
   if (!userId) {
-    console.log("UserId param not sent with request");
     return res.status(400).send("error");
   }
 

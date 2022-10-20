@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { chatList } from "../data/chat";
+// import { chatList } from "../data/chat";
 import { FaCloud } from "react-icons/fa";
 import instance from "../utils/axios";
 import { useAppSelector } from "../context/hooks";
 import { UserI } from "../interfaces/userInterface";
+import { chatI, messageI } from "../interfaces/chatInterfaces";
 
 export default function ChatList({
   chat,
   setChat,
+  joinRoom,
+  chatList,
+  signalRoomJoin,
+  setMessages,
 }: {
-  chat: string;
-  setChat: React.Dispatch<React.SetStateAction<string>>;
+  chat: chatI | null;
+  setChat: React.Dispatch<React.SetStateAction<chatI | null>>;
+  joinRoom: (id: string) => void;
+  chatList: chatI[];
+  signalRoomJoin: (arg: { id: string }) => void;
+  setMessages: React.Dispatch<React.SetStateAction<messageI[]>>;
 }) {
   const { userInfo } = useAppSelector((state) => state.user);
 
@@ -35,6 +44,18 @@ export default function ChatList({
     getData();
   }, []);
 
+  const handleChat = async (chat: chatI) => {
+    setChat(chat);
+    signalRoomJoin({ id: chat._id ? chat._id : "" });
+
+    const config = {
+      headers: { Authorization: `Bearer ${userInfo?.token}` },
+    };
+    var { data } = await instance.get(`/msg/${chat._id}`, config);
+    console.log(data);
+    setMessages(data);
+  };
+
   return (
     <div className="flex flex-col w-full h-[100vh] overflow-scroll">
       <div className="p-2 bg-white flex flex-row gap-3 items-center border-b-2">
@@ -49,9 +70,13 @@ export default function ChatList({
           <div
             key={chat._id}
             className="flex-1 border-2 p-1 px-5 cursor-pointer hover:bg-gray-200 shadow-md rounded-3xl"
-            onClick={() => setChat(chat.chatName)}
+            onClick={() => handleChat(chat)}
           >
-            <p className="text-base font-semibold">{chat.chatName}</p>
+            <p className="text-base font-semibold">
+              {chat.users[0].name === userInfo?.name
+                ? chat.users[1].name
+                : chat.users[0].name}
+            </p>
             <div className="text-sm">Users: {chat.users.length}</div>
           </div>
         ))}
@@ -68,6 +93,9 @@ export default function ChatList({
               <div
                 key={user._id}
                 className="flex-1 border-2 p-1 px-5 cursor-pointer hover:bg-gray-200 shadow-md rounded-3xl"
+                onClick={() => {
+                  joinRoom(user._id ? user._id : "");
+                }}
               >
                 {user.name}
               </div>

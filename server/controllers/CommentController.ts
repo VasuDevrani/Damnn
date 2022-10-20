@@ -5,7 +5,6 @@ import Comments from "../models/CommentModel";
 import Post from "../models/PostModel";
 
 const createComment = async (req: Request, res: Response) => {
-  console.log(req.method);
   try {
     const postId = req.params.id;
     const { user, content, replies } = req.body;
@@ -20,9 +19,8 @@ const createComment = async (req: Request, res: Response) => {
     let postItem = await Post.findById(postId);
 
     var preData = postItem?.comments as commentI[];
-    console.log(preData);
 
-    const newPost = await Post.findByIdAndUpdate(
+    await Post.findByIdAndUpdate(
       postItem?._id,
       {
         comments: [...preData, comment._id.toString()],
@@ -30,7 +28,6 @@ const createComment = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    console.log(newPost);
     res.status(200).json(comment);
   } catch (err: any) {
     res.status(500).json({ message: err.message });
@@ -38,7 +35,6 @@ const createComment = async (req: Request, res: Response) => {
 };
 
 const deleteComment = async (req: Request, res: Response) => {
-  console.log(req.method);
   try {
     const commentId = req.params.id;
 

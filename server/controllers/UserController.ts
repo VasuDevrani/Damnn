@@ -8,7 +8,6 @@ const registerUser = async (req: Request, res: Response) => {
   try {
     const pre_user = await User.find({ email: req.body.email });
     if (pre_user.length !== 0) {
-      console.log(pre_user);
       res.status(500).json({ message: "User already exist" });
       return;
     }
@@ -109,7 +108,6 @@ const updateUser = async (req: Request, res: Response) => {
 };
 
 const updateFollow = async (req: Request, res: Response) => {
-  console.log(req.body);
   // the user who followed
   const id: string = (req as CustomRequest).user._id as string;
 
@@ -139,15 +137,12 @@ const updateFollow = async (req: Request, res: Response) => {
       }
     }
 
-    console.log(followerArr);
-
     if (ct === 0) followerArr = [...followerArr, id];
     else
       followerArr = followerArr.filter((item) => {
         return item.toString() !== id.toString();
       });
 
-    console.log(followerArr);
     await User.findByIdAndUpdate(
       followerId,
       {
@@ -157,8 +152,6 @@ const updateFollow = async (req: Request, res: Response) => {
     );
     res.status(200).json(details);
   } catch (err: any) {
-    console.log(err);
-
     res.status(500).json({ error: err.message });
   }
 };
@@ -193,14 +186,11 @@ const userDataByEmail = async (req: Request, res: Response) => {
       token: token,
     });
   } catch (err: any) {
-    console.log(err);
     res.status(400).json({ error: err.message });
   }
 };
 
 const getPopularUsers = async (req: Request, res: Response) => {
-  console.log(req.method);
-
   try {
     const id = (req as CustomRequest).user._id;
 
