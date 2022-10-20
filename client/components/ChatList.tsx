@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-// import { chatList } from "../data/chat";
+// import { chatList } from "../data/chat"; static data
 import { FaCloud } from "react-icons/fa";
 import instance from "../utils/axios";
 import { useAppSelector } from "../context/hooks";
 import { UserI } from "../interfaces/userInterface";
 import { chatI, messageI } from "../interfaces/chatInterfaces";
+import GroupChatModal from "./GroupChatModal";
 
 export default function ChatList({
   chat,
@@ -13,6 +14,7 @@ export default function ChatList({
   chatList,
   signalRoomJoin,
   setMessages,
+  setChatList,
 }: {
   chat: chatI | null;
   setChat: React.Dispatch<React.SetStateAction<chatI | null>>;
@@ -20,10 +22,12 @@ export default function ChatList({
   chatList: chatI[];
   signalRoomJoin: (arg: { id: string }) => void;
   setMessages: React.Dispatch<React.SetStateAction<messageI[]>>;
+  setChatList: React.Dispatch<React.SetStateAction<chatI[]>>;
 }) {
   const { userInfo } = useAppSelector((state) => state.user);
 
   const [users, setUsers] = useState<UserI[]>([]);
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -73,7 +77,7 @@ export default function ChatList({
             onClick={() => handleChat(chat)}
           >
             <p className="text-base font-semibold">
-              {chat.users[0].name === userInfo?.name
+              {chat.isGroupChat ? chat.chatName : chat.users[0].name === userInfo?.name
                 ? chat.users[1].name
                 : chat.users[0].name}
             </p>
@@ -86,7 +90,9 @@ export default function ChatList({
       <div className="flex flex-col gap-3 ml-3">
         <p className="text-xl font-bold">Start a Chat</p>
         {/* create group chat btn */}
-        <div className="btn py-2 my-3">Create Group Chat</div>
+        <div className="btn py-2 my-3" onClick={() => setModal(!modal)}>
+          Create Group Chat
+        </div>
         {users.length > 0 && (
           <div className="flex flex-col gap-3 mb-10">
             {users.map((user) => (
@@ -102,6 +108,13 @@ export default function ChatList({
             ))}
           </div>
         )}
+        <GroupChatModal
+          modal={modal}
+          setModal={setModal}
+          users={users}
+          chatList={chatList}
+          setChatList={setChatList}
+        />
       </div>
     </div>
   );

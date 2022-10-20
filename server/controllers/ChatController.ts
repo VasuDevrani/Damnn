@@ -76,15 +76,13 @@ export const fetchChats = async (req: Request, res: Response) => {
 };
 
 export const createGroupChat = async (req: Request, res: Response) => {
-  if (!req.body.users || !req.body.name) {
-    return res.status(400).send({ message: "Please Fill all the fields" });
+  const {users, name} = req.body;
+  if (!users || !name) {
+    return res.status(500).send({ message: "Please Fill all the fields" });
   }
-
-  var users = JSON.parse(req.body.users);
-
   if (users.length < 2) {
     return res
-      .status(400)
+      .status(500)
       .send("More than 2 users are required to form a group chat");
   }
 
@@ -92,7 +90,7 @@ export const createGroupChat = async (req: Request, res: Response) => {
 
   try {
     const groupChat = await Chat.create({
-      chatName: req.body.name,
+      chatName: name,
       users: users,
       isGroupChat: true,
       groupAdmin: (req as CustomRequest).user,
@@ -104,7 +102,7 @@ export const createGroupChat = async (req: Request, res: Response) => {
 
     res.status(200).json(fullGroupChat);
   } catch (error: any) {
-    res.status(400);
+    res.status(500);
     throw new Error(error.message);
   }
 };

@@ -22,6 +22,7 @@ export default function ChatMain({
 }) {
   const [showPicker, setShowPicker] = useState(false);
   const [inputStr, setInputStr] = useState("");
+  const [modal, setModal] = useState(false);
 
   const { userInfo } = useAppSelector((state) => state.user);
 

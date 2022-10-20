@@ -25,13 +25,13 @@ export const protect = async (req: Request, res: Response, next: NextFunction) =
           
       return next()
     } catch (error) {
-      res.status(401);
+      res.status(500);
       throw new Error("Not authorized, token failed");
     }
   }
 
   if (!token) {
-    res.status(401);
+    res.status(500);
     throw new Error("Not authorized, no token");
   }
 };

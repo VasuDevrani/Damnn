@@ -96,6 +96,7 @@ export default function Chat() {
             chatList={chatList}
             signalRoomJoin={signalRoomJoin}
             setMessages={setMessages}
+            setChatList={setChatList}
           />
         </div>
       </div>
